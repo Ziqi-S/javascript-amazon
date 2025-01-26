@@ -1,6 +1,6 @@
 let productsHTML = '';
 
-products.forEach((product, index) => {
+products.forEach((product) => {
     
     //accumulator pattern
     productsHTML += `
@@ -49,11 +49,43 @@ products.forEach((product, index) => {
             Added
           </div>
 
-          <button class="add-to-cart-button button-primary">
+          <button class="add-to-cart-button button-primary"
+          data-product-id="${product.id}">
             Add to Cart
           </button>
         </div>
-    `
+    `   
 });
 
 document.querySelector('.products-grid').innerHTML = productsHTML;
+
+document.querySelectorAll('.add-to-cart-button')
+    .forEach((button) => {
+        button.addEventListener('click', () => {
+          /*
+            How do we know which product to add?
+            - Data Attribute
+              - is just another HTML attribute
+              - have to start with "data-"
+              - then give it any name
+              - allows us to attach any information to an element
+          */
+          const productId = button.dataset.productId;//be sure to change product-name to productName
+
+          let matchingItem;
+          cart.forEach((item) => {
+            if(productId === item.productId){
+              item.quantity += 1;
+              matchingItem = item;
+            }
+          });
+
+          if(!matchingItem){
+            cart.push({
+              productId: productId,
+              quantity: 1
+            })
+          }
+          console.log(cart);
+        });
+    });
