@@ -1,4 +1,4 @@
-import { cart } from "../data/cart.js";
+import { cart, addToCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 
 let productsHTML = '';
@@ -63,10 +63,57 @@ products.forEach((product) => {
 
 document.querySelector('.products-grid').innerHTML = productsHTML;
 
+function updateCartQuantity(){
+  let cartQuantity = 0;
+  cart.forEach((item) => {
+    cartQuantity += item.quantity;
+  })
+
+  document.querySelector('.cart-quantity').innerHTML = cartQuantity;
+}
+
+let addedMessageTimeOutId;//存储timeoutID
+function showAddedMessage(productId){
+  //---------------------show Added message---------------------//
+  const addMessage = document.querySelector(`.added-to-cart-${productId}`);
+
+  //在点击加入购物车时增加一个class,用来控制Added的显示
+  addMessage.classList.add('added-to-cart-visible');
+
+  //如果连续点击加入购物车，第二次显示的Added可能还没到两秒就消失了
+  //用clearTimeout()来清除上次的timeout计时
+  /*
+    Each time we run the loop, it will create
+    a new variable called addedMessageTimeoutId and do
+    button.addEventListener().
+    
+    Then, because of closure, the function we give to
+    button.addEventListener() will get a unique copy
+    of the addedMessageTimeoutId variable and it will
+    keep this copy of the variable forever.
+    (Reminder: closure = if a function has access to a
+    value/variable, it will always have access to that
+    value/variable).
+    
+    This allows us to create many unique copies of the
+    addedMessageTimeoutId variable (one for every time
+    we run the loop) so it lets us keep track of many
+    timeoutIds (one for each product).
+  */
+  if(addedMessageTimeOutId){
+    clearTimeout(addedMessageTimeOutId);
+  }
+
+  const timeOutId = setTimeout(() => {
+    addMessage.classList.remove('added-to-cart-visible'); 
+  }, 2000); 
+
+  addedMessageTimeOutId = timeOutId;
+};
+
 document.querySelectorAll('.add-to-cart-button')
   .forEach((button) => {
-    let addedMessageTimeOutId;//存储timeoutID
-
+    
     button.addEventListener('click', () => {
       /*
         How do we know which product to add?
@@ -78,63 +125,9 @@ document.querySelectorAll('.add-to-cart-button')
       */
       const productId = button.dataset.productId;//be sure to change product-name to productName
 
-      let matchingItem;
-      cart.forEach((item) => {
-        if(productId === item.productId){
-          item.quantity += 1;
-          matchingItem = item;
-        }
-      });
-
-      if(!matchingItem){
-        cart.push({
-          productId: productId,
-          quantity: 1
-        })
-      }
-
-      let cartQuantity = 0;
-      cart.forEach((item) => {
-        cartQuantity += item.quantity;
-      })
-
-      document.querySelector('.cart-quantity').innerHTML = cartQuantity;
-
-      //---------------------show Added message---------------------//
-      const addMessage = document.querySelector(`.added-to-cart-${productId}`);
-
-      //在点击加入购物车时增加一个class,用来控制Added的显示
-      addMessage.classList.add('added-to-cart-visible');
-
-      //如果连续点击加入购物车，第二次显示的Added可能还没到两秒就消失了
-      //用clearTimeout()来清除上次的timeout计时
-      /*
-        Each time we run the loop, it will create
-        a new variable called addedMessageTimeoutId and do
-        button.addEventListener().
-        
-        Then, because of closure, the function we give to
-        button.addEventListener() will get a unique copy
-        of the addedMessageTimeoutId variable and it will
-        keep this copy of the variable forever.
-        (Reminder: closure = if a function has access to a
-        value/variable, it will always have access to that
-        value/variable).
-        
-        This allows us to create many unique copies of the
-        addedMessageTimeoutId variable (one for every time
-        we run the loop) so it lets us keep track of many
-        timeoutIds (one for each product).
-      */
-      if(addedMessageTimeOutId){
-        clearTimeout(addedMessageTimeOutId);
-      }
-
-      const timeOutId = setTimeout(() => {
-        addMessage.classList.remove('added-to-cart-visible'); 
-      }, 2000); 
-
-      addedMessageTimeOutId = timeOutId;
+      addToCart(productId);
+      updateCartQuantity();
+      showAddedMessage(productId);
     });
   });
 
