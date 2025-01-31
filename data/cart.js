@@ -44,3 +44,9 @@ export function updateCartQuantity(){
 
   return cartQuantity;
 }
+
+export function updateQuantity(productId,newQuantity){
+  let product = cart.find(item => item.productId === productId);
+  product.quantity = newQuantity;
+  saveToStorage();
+}
