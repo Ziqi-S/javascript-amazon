@@ -6,7 +6,7 @@ if(!cart){
   cart=[{
     productId: '',
     quantity: 0,
-    deliveryOptionId: '1'
+    deliveryOptionId: '2'
   }]
 }
 
@@ -27,7 +27,7 @@ export function addToCart(productId){
       cart.push({
         productId: productId,
         quantity: 1,
-        deliveryOptionId: '1'
+        deliveryOptionId: '2'
       })
     }
     saveToStorage();
