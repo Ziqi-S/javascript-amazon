@@ -1,9 +1,10 @@
 import { cart, removeFromCart, updateCartQuantity, updateQuantity, updateDeliveryOption} from "../../data/cart.js";
-import { products } from "../../data/products.js";
+import { products, getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
-import { deliveryOptions } from '../../data/deliveryOptions.js'
+import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js'
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js'
 import { calculateDate } from "../utils/date.js"
+import { renderPaymentSummary } from "./paymentSummary.js";
 
 export function renderOrderSummary(){
   document.querySelector('.checkout-quantity').innerHTML = updateCartQuantity() + ' items';
@@ -11,15 +12,10 @@ export function renderOrderSummary(){
 
   cart.forEach((item) => {
     let productId = item.productId;
-    let matchingProduct = products
-      //filter返回的是一个数组，即使只有一个匹配项, 这会导致找不到数据源。要直接获取匹配的对象，需要从数组中取第一项
-      //.filter(product => product.id === itemId);
-      .find(product => product.id === productId)
 
-    const deliveryOptionId = item.deliveryOptionId;
-
-    let deliveryOption = deliveryOptions.find(option => option.id === deliveryOptionId);
-
+    const matchingProduct = getProduct(productId);
+    const deliveryOption = getDeliveryOption(item);
+    
     const today = dayjs();
     const deliveryDate = today.add(
       deliveryOption.deliveryDays,
@@ -114,8 +110,10 @@ export function renderOrderSummary(){
         const productId = link.dataset.productId;
         removeFromCart(productId);
         document.querySelector(`.cart-item-container-${productId}`).remove();
-        //---------------------------Update Checkout Quantity---------------------------//
+        //--Update Checkout Quantity--//
         document.querySelector('.checkout-quantity').innerHTML = updateCartQuantity() + ' items';
+        //--Update Payment--//
+        renderPaymentSummary();
       })
     })
 
@@ -150,6 +148,7 @@ export function renderOrderSummary(){
 
       document.querySelector(`.quantity-label-${productId}`).innerHTML = newQuantity;
       document.querySelector('.checkout-quantity').innerHTML = updateCartQuantity() + ' items';
+      renderPaymentSummary();
     });
 
     //Keydown event
@@ -185,7 +184,8 @@ export function renderOrderSummary(){
         option.addEventListener('click', () => {
           const {productId, optionId} = option.dataset;
           updateDeliveryOption(productId, optionId);
-          renderOrderSummary()
+          renderOrderSummary();
+          renderPaymentSummary();
         })
       })
 }

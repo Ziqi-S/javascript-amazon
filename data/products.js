@@ -1,3 +1,11 @@
+export function getProduct(productId){
+  let matchingProduct = products
+        //filter返回的是一个数组，即使只有一个匹配项, 这会导致找不到数据源。要直接获取匹配的对象，需要从数组中取第一项
+        //.filter(product => product.id === itemId);
+        .find(product => product.id === productId)
+  return matchingProduct;
+}
+
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
