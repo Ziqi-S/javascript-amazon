@@ -1,5 +1,5 @@
 import { cart, removeFromCart, updateCartQuantity, updateQuantity, updateDeliveryOption} from "../../data/cart.js";
-import { products, getProduct } from "../../data/products.js";
+import { getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js'
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js'
@@ -9,11 +9,10 @@ import { renderPaymentSummary } from "./paymentSummary.js";
 export function renderOrderSummary(){
   document.querySelector('.checkout-quantity').innerHTML = updateCartQuantity() + ' items';
   let cartItemHTML = '';
-
   cart.forEach((item) => {
     let productId = item.productId;
-
     const matchingProduct = getProduct(productId);
+    console.log(matchingProduct)
     const deliveryOption = getDeliveryOption(item);
     
     const today = dayjs();

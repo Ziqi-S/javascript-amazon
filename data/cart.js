@@ -1,14 +1,5 @@
 //export: cart can be used outside of cart.js
-export let cart = JSON.parse(localStorage.getItem('cart'));
-
-//default cart
-if(!cart){
-  cart=[{
-    productId: '',
-    quantity: 0,
-    deliveryOptionId: '2'
-  }]
-}
+export let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 function saveToStorage(){
   localStorage.setItem('cart', JSON.stringify(cart));

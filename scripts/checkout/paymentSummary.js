@@ -1,5 +1,5 @@
-import { cart, removeFromCart, updateCartQuantity, updateQuantity, updateDeliveryOption} from "../../data/cart.js";
-import { products, getProduct } from "../../data/products.js";
+import { cart, updateCartQuantity} from "../../data/cart.js";
+import { getProduct } from "../../data/products.js";
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js'
 import { formatCurrency } from "../utils/money.js";
 
