@@ -1,6 +1,15 @@
 //export: cart can be used outside of cart.js
 export let cart = JSON.parse(localStorage.getItem('cart'));
 
+//default cart
+if(!cart){
+  cart=[{
+    productId: '',
+    quantity: 0,
+    deliveryOptionId: '1'
+  }]
+}
+
 function saveToStorage(){
   localStorage.setItem('cart', JSON.stringify(cart));
 }
@@ -17,7 +26,8 @@ export function addToCart(productId){
     if(!matchingItem){
       cart.push({
         productId: productId,
-        quantity: 1
+        quantity: 1,
+        deliveryOptionId: '1'
       })
     }
     saveToStorage();
