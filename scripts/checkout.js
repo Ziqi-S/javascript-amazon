@@ -1,4 +1,4 @@
-import { cart, removeFromCart, updateCartQuantity, updateQuantity} from "../data/cart.js";
+import { cart, removeFromCart, updateCartQuantity, updateQuantity, updateDeliveryOption} from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 import { deliveryOptions } from '../data/deliveryOptions.js'
@@ -95,9 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.delivery-option-input')
     .forEach((option) => {
       option.addEventListener('change', () => {
-        const productId = option.dataset.productId;
-        const optionId = option.dataset.optionId;
+        //const productId = option.dataset.productId;
+        //const optionId = option.dataset.optionId;
+        const {productId, optionId} = option.dataset;
         const dateString = calculateDate(optionId);
+        updateDeliveryOption(productId, optionId)
         document.querySelector(`.delivery-date-${productId}`).innerHTML = `Delivery Date: ${dateString}`
       })
     }) 
