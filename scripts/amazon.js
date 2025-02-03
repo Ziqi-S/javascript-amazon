@@ -44,10 +44,12 @@ products.forEach((product) => {
           </select>
         </div>
 
+        ${product.extraInfoHTML()}
+        
         <div class="product-spacer"></div>
 
         <div class="added-to-cart added-to-cart-${product.id}">
-        <!--想要在点击加入购物车时动态显示Added，用added-to-cart-${product.id}来定位是哪一个button-->
+        <!--想要在点击加入购物车时动态显示Added, 用added-to-cart-${product.id}来定位是哪一个button-->
           <img src="images/icons/checkmark.png">
           Added
         </div>
