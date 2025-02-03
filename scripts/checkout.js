@@ -32,7 +32,12 @@ loadProductsFetch().then(() => {
 */
 
 async function loadPage(){
-    await loadProductsFetch()
+    try{
+        //throw 'error1'; //manually create error
+        await loadProductsFetch()
+    }catch(error){
+        console.log('Unexpected error')
+    }
 
     renderOrderSummary();
     renderPaymentSummary();
