@@ -1,7 +1,11 @@
 import { addToCart,updateCartQuantity } from "../data/cart.js";
-import { products } from "../data/products.js";
+import { products, loadProducts } from "../data/products.js";
 
-let productsHTML = '';
+//Callback: a function to run in the future
+loadProducts(renderProductsGrid);
+
+function renderProductsGrid(){
+  let productsHTML = '';
 
 products.forEach((product) => {
     
@@ -123,4 +127,5 @@ document.querySelectorAll('.add-to-cart-button')
       showAddedMessage(productId);
     });
   });
+}
 
