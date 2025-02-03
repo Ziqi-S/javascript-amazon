@@ -92,7 +92,7 @@ export function loadProducts(fun){
     console.log('Unexpected error')
   });
 
-  xhr.open('GET', 'https://error.supersimplebackend.dev/products');
+  xhr.open('GET', 'https://supersimplebackend.dev/products');
   xhr.send();
 }
 
