@@ -54,6 +54,25 @@ class Clothing extends Product{
 
 export let products = [];
 
+export function loadProductsFetch(){
+  const promise = fetch(
+      'https://supersimplebackend.dev/products')//will add a promise automatially, to wait for the response
+    
+    .then((response) => {
+      return response.json();//get the data attached to this response
+      //response.json() is asynchrosnous. It returns a promise
+    
+    }).then((productsData) => {//response.json()会自动存储在then()的param里，而且自动进行JSON.parse()
+      products = productsData.map((productDetails) => {
+        if(productDetails.type === 'clothing'){
+          return new Clothing(productDetails);
+        }  
+        return new Product(productDetails);
+      });
+    })
+    return promise;
+}
+
 export function loadProducts(fun){
   const xhr = new XMLHttpRequest();
 
