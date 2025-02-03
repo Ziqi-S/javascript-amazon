@@ -1,9 +1,36 @@
+import { formatCurrency } from "../scripts/utils/money.js";
+
 export function getProduct(productId){
   let matchingProduct = products
         //filter返回的是一个数组，即使只有一个匹配项, 这会导致找不到数据源。要直接获取匹配的对象，需要从数组中取第一项
         //.filter(product => product.id === itemId);
         .find(product => product.id === productId)
   return matchingProduct;
+}
+
+//Converting an object into a class
+class Product {
+  id;
+  image;
+  name;
+  rating;
+  priceCents;
+
+  constructor(productDetails){
+    this.id = productDetails.id;
+    this.image = productDetails.image;
+    this.name = productDetails.name;
+    this.rating = productDetails.rating;
+    this.priceCents = productDetails.priceCents;
+  }
+
+  getStarsUrl(){
+    return `images/ratings/rating-${this.rating.stars * 10}.png`
+  }
+
+  getPrice(){
+    return `$${formatCurrency(this.priceCents)}`
+  }
 }
 
 export const products = [
@@ -665,4 +692,6 @@ export const products = [
       "mens"
     ]
   }
-];
+].map((productDetails) => {
+  return new Product(productDetails);
+});
